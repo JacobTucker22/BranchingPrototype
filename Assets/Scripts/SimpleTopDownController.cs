@@ -1,19 +1,29 @@
+using PixelCrushers.DialogueSystem;
 using UnityEngine;
 
 public class SimpleTopDownController : MonoBehaviour
 {
-    [Header("Movement Settings")]
+     public ProximitySelector proximitySelector;
+     [Header("Movement Settings")]
     public float moveSpeed = 5f;
+     public bool canMove = true;
 
     [Header("References")]
     [Tooltip("Assign the child GameObject (model) to rotate.")]
     public Transform modelTransform;
 
-    // Update is called once per frame
-    void Update()
+     private void Awake()
+     {
+          proximitySelector = GetComponent<ProximitySelector>();
+     }
+
+     // Update is called once per frame
+     void Update()
     {
-        // Get input from WASD or arrow keys
-        float moveX = Input.GetAxisRaw("Horizontal");
+          if(!canMove) return;
+
+          // Get input from WASD or arrow keys
+          float moveX = Input.GetAxisRaw("Horizontal");
         float moveZ = Input.GetAxisRaw("Vertical");
 
         // Create movement vector (XZ plane)
@@ -30,4 +40,11 @@ public class SimpleTopDownController : MonoBehaviour
             modelTransform.rotation = targetRotation;
         }
     }
+
+     public void SetCanMove(bool value)
+     {
+          canMove = value;
+          proximitySelector.enabled = value;
+     }
+
 }
